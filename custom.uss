@@ -1,4 +1,209 @@
-/* Personal overrides. extract.sh never overwrites this file.
- * Find native selectors in reference/AlwaysAppliedStyleSheet.uss and override
- * only the properties you need. Put variable overrides inside a :root block.
+/* Refine the native management workspace. extract.sh preserves this file. */
+:root {
+  --refined-page: #16181D;
+  --refined-card: #1E2129;
+  --refined-card-border: rgba(255, 255, 255, 0.08);
+  --refined-card-radius: 8px;
+  --refined-content-inset: 10px;
+
+  /* Defaults outside the management workspace retain native paint. */
+  --refined-page-paint: rgba(0, 0, 0, 0);
+  --refined-frame-tint: #B4B4B4;
+  --refined-tile-surface: rgba(0, 0, 0, 0);
+  --refined-tile-border: var(--colours-alpha-light-20);
+  --refined-decoration-opacity: 1;
+  --refined-gradient-end: var(--none);
+  --refined-page-inset: 0px;
+}
+
+/* Backgrounds: paint visible pages rather than the full-window scene host.
+ * The latter also sits over the live match renderer and the main menu.
  */
+#MenuBody,
+#ReportBody {
+  --refined-page-paint: var(--refined-page);
+  --refined-frame-tint: rgba(255, 255, 255, 0);
+  --refined-tile-surface: var(--refined-card);
+  --refined-tile-border: var(--refined-card-border);
+  --refined-decoration-opacity: 0;
+  --refined-gradient-end: var(--layout-ui-tiles-interaction-surface-light-default);
+  --refined-page-inset: var(--refined-content-inset);
+  --layout-modules-block-surface: var(--refined-card);
+  --layout-modules-block-border-colour: var(--refined-card-border);
+  --layout-modules-block-border-thickness: 1px;
+  --layout-modules-block-radius: var(--refined-card-radius);
+  --layout-ui-cards-light-background: var(--refined-card);
+  --layout-ui-cards-dark-background: var(--refined-card);
+  --layout-ui-cards-light-border: var(--refined-card-border);
+  --layout-ui-cards-dark-border: var(--refined-card-border);
+  --global-border-width-tile-card: 1px;
+}
+
+/* Match screens and pre-game menus retain their original surfaces and spacing.
+ * These local values also protect descendants from the workspace variables.
+ */
+#OverviewPrototype,
+#HalfTimeTeamReport,
+#FullTimeTeamReport,
+#MainMenu {
+  --refined-page-paint: rgba(0, 0, 0, 0);
+  --refined-frame-tint: #B4B4B4;
+  --refined-tile-surface: rgba(0, 0, 0, 0);
+  --refined-tile-border: var(--colours-alpha-light-20);
+  --refined-decoration-opacity: 1;
+  --refined-gradient-end: var(--none);
+  --refined-page-inset: 0px;
+  --layout-modules-block-surface: var(--colours-alpha-dark-75);
+  --layout-modules-block-border-colour: var(--colours-alpha-light-24);
+  --layout-modules-block-border-thickness: var(--border-width-border-width-1);
+  --layout-modules-block-radius: var(--border-radius-radius-8);
+  --layout-ui-cards-light-background: var(--colours-ui-soft);
+  --layout-ui-cards-dark-background: var(--colours-ui-soft);
+  --layout-ui-cards-light-border: var(--colours-alpha-light-16);
+  --layout-ui-cards-dark-border: var(--colours-alpha-light-16);
+  --global-border-width-tile-card: var(--border-width-border-width-0-5);
+}
+
+#MenuBody > .panel,
+#ReportBody > .panel {
+  background-color: var(--refined-page-paint);
+  margin: var(--refined-page-inset);
+  padding: 0;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  flex-grow: 1;
+  align-self: stretch;
+}
+
+/* Card-frame is an SIImage. Clear its own bound artwork through image tint;
+ * whole-element opacity would hide its header, grid, and content as well.
+ */
+#MenuBody #Card-frame,
+#ReportBody #Card-frame {
+  background-color: var(--refined-page-paint);
+  --unity-image-tint-color: var(--refined-frame-tint);
+  -unity-background-image-tint-color: var(--refined-frame-tint);
+}
+
+#MenuBody .messages-header-gradient,
+#ReportBody .messages-header-gradient,
+#MenuBody .messages-header-texture-club,
+#ReportBody .messages-header-texture-club {
+  opacity: var(--refined-decoration-opacity);
+}
+
+.tile-background-gradient--to-transparent {
+  --end-colour: var(--refined-gradient-end);
+}
+
+/* Navigation keeps native automatic team/entity colours and contrast binding.
+ * Only the secondary bar's decorative texture is hidden; its labels, logos,
+ * interaction states, and bound colour layers remain intact.
+ */
+#MenuTitle #SecondaryNavigationBar .global-nav_secondary-texture-entity-viewer {
+  opacity: 0;
+}
+
+/* Layout: the outer shells own the 10px gutter. Use auto widths so native
+ * 100%-wide navigation does not overflow once horizontal margins are added.
+ */
+#MenuTitle #MainNav {
+  margin: var(--refined-content-inset);
+  /* The secondary row supplies the single 10px gap between the two bars. */
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  width: auto;
+  min-width: 0;
+  align-self: stretch;
+}
+
+#MenuTitle #SecondaryNavigationBar {
+  margin: var(--refined-content-inset);
+  padding: 0;
+  width: auto;
+  min-width: 0;
+  flex-grow: 1;
+  align-self: stretch;
+}
+
+/* The native inner bar adds another 8px on the right. Keep a single inset. */
+#MenuTitle #MainNavigationBar {
+  padding-right: 0;
+}
+
+#MenuBody #Card-frame > #GridSafeArea,
+#ReportBody #Card-frame > #GridSafeArea,
+#MenuBody #ElementBindingRoot > #BindingVariables > #BindingSetter > #GridSafeArea,
+#ReportBody #ElementBindingRoot > #BindingVariables > #BindingSetter > #GridSafeArea {
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  align-self: stretch;
+}
+
+/* Let each screen's grid use the shell's available width. Card placement and
+ * spacing between cards remain owned by the native grid, not by every card.
+ */
+#MenuBody #Card-frame > #GridSafeArea > *,
+#ReportBody #Card-frame > #GridSafeArea > *,
+#MenuBody #ElementBindingRoot > #BindingVariables > #BindingSetter > #GridSafeArea > *,
+#ReportBody #ElementBindingRoot > #BindingVariables > #BindingSetter > #GridSafeArea > * {
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  align-self: stretch;
+}
+
+/* Cards: native block rules consume the workspace variables above. Keep tile
+ * border selectors at native specificity so tactical status rules still win.
+ */
+.layout-tile-base-container {
+  background-color: var(--refined-tile-surface);
+}
+
+.surfaces-card-tile-border {
+  border-color: var(--refined-tile-border);
+}
+
+/* People: keep portrait dimensions/cropping, replace only circular frames.
+ * Small thumbnails need smaller corners so they still read as rectangles.
+ */
+.person-picture-circle-frame,
+.person_picture_80px,
+.person_picture_120px,
+.thumbnails-alt-person-picture-property-1-44px,
+.thumbnails-alt-person-picture-player-report {
+  border-radius: 8px;
+}
+
+.thumbnails-alt-person-picture-property-1-person_picture_alt,
+.thumbnails-person-picture-job-player-sex-male-player-1 {
+  border-radius: 6px;
+}
+
+.person_picture_24px,
+.thumbnails-alt-person-picture-club-property-1-32px,
+.thumbnails-alt-person-picture-property-1-24px,
+.thumbnails-alt-person-picture-property-1-32px,
+.thumbnails-alt-person-picture-property-1-variant2,
+.thumbnails-alt-person-picture-property-1-variant3,
+.thumbnails-person-picture-job-player-sex-male {
+  border-radius: 4px;
+}
+
+.thumbnails-alt-person-picture-property-1-16px {
+  border-radius: 3px;
+}
