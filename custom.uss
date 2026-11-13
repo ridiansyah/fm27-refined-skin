@@ -1,0 +1,4 @@
+/* Personal overrides. extract.sh never overwrites this file.
+ * Find native selectors in reference/AlwaysAppliedStyleSheet.uss and override
+ * only the properties you need. Put variable overrides inside a :root block.
+ */

@@ -1,0 +1,8 @@
+# Generated from the local game installation. Do not redistribute.
+/reference/
+/variables.uss
+
+.DS_Store
+__pycache__/
+*.py[cod]
+.venv/
